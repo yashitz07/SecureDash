@@ -7,7 +7,7 @@ async function query(data) {
         "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1",
         {
             headers: {
-                Authorization: `Bearer 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`,
+                Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
                 'Content-Type': 'application/json'
             },
             method: "POST",
