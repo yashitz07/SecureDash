@@ -1,0 +1,40 @@
+.landing-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .content {
+    text-align: center;
+    color: #ebe5e5;
+  }
+  
+  .content h1 {
+    font-size: 3rem;
+    margin-bottom: 30px;
+
+  }
+  
+  .content p {
+    font-size: 3rem;
+    margin-bottom: 50px;
+    color: #4de705;
+  }
+  
+  .content .login-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #08e626;
+    color: white;
+    text-decoration: none; /* Remove default link underline */
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #d19407;
+  }
+  
