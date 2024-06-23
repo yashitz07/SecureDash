@@ -1,40 +1,126 @@
-.landing-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .content {
-    text-align: center;
-    color: #ebe5e5;
-  }
-  
-  .content h1 {
-    font-size: 3rem;
-    margin-bottom: 30px;
+.home * {
+  box-sizing: content-box;
+}
 
-  }
-  
-  .content p {
-    font-size: 3rem;
-    margin-bottom: 50px;
-    color: #4de705;
-  }
-  
-  .content .login-button {
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    background-color: #08e626;
-    color: white;
-    text-decoration: none; /* Remove default link underline */
-    border-radius: 30px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .login-button:hover {
-    background-color: #d19407;
-  }
-  
+.home {
+  height: 100vh; /* Ensure component covers the entire viewport height */
+  margin: 0;
+  padding: 0;
+  background: #1c2332;
+  color: white;
+  font-size: 1rem;
+  font-family: Lato, sans-serif;
+  font-weight: 300;
+  display: flex; /* Center align content horizontally and vertically */
+  justify-content: center;
+  align-items: center;
+}
+
+.home .text-shadow {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.home .flex-container {
+  display: flex;
+  flex-direction: column; /* Ensure flex items stack vertically */
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Take up full height of component */
+  width: 100%;
+  overflow: hidden;
+  position: relative; /* Ensure absolute positioning works correctly */
+}
+
+.home .flex-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.home .bkg__spotlight {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(75% 35% at 50% 95%, rgba(80, 82, 98, 0.6) 20%, rgba(80, 82, 98, 0) 90%), linear-gradient(rgba(28, 35, 50, 0) 0%, #1c2332 80%);
+  z-index: -1;
+}
+
+.home .bkg__spotlight:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: radial-gradient(50vw 60vw at 50% 70%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 60%), radial-gradient(35% 15% at 50% 85%, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.home header {
+  padding-top: 2%;
+}
+
+.home header :first-child {
+  padding-bottom: 25px;
+}
+
+.home header p {
+  text-align: center;
+  padding-top: 60px;
+  margin: auto 25%;
+  color: #eee;
+  font-size: 1.15rem;
+  font-weight: 300;
+  letter-spacing: 0.85px;
+}
+
+.home .animate-slide-up {
+  opacity: 0;
+}
+
+.home h1, .home h2 {
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  word-spacing: 5px;
+  margin: 0;
+}
+
+.home h1 {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 100;
+}
+
+.home h2 {
+  font-family: "Lato", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-top: 1rem;
+}
+
+.home .register-link {
+  margin-top: 12px;
+  display: block;
+}
+
+.home .register-button {
+  background: linear-gradient(to right, #007bff, #00b3ff, #00d4ff);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.home .register-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.home .register-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}

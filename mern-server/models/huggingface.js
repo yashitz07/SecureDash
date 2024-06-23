@@ -1,6 +1,6 @@
 // huggingface.js
 require('dotenv').config();
-const fetch = require('node-fetch');
+
 
 async function query(data) {
     const response = await fetch(

@@ -30,52 +30,39 @@ const clientSecret = process.env.CLIENT_SECRET;
 const redirectUri = process.env.REDIRECT_URI;
 
 
-// app.get("/auth/github", (req, res) => {
-//     const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user`;
-//     res.redirect(githubAuthUrl);
-// });
 
-app.get("/auth/github/callback", async (req, res) => {
-    const code = req.query.code;
-
-    try {
-        const tokenResponse = await axios.post("https://github.com/login/oauth/access_token", {
-            client_id: clientId,
-            client_secret: clientSecret,
-            code: code
-        }, {
-            headers: {
-                accept: "application/json"
-            }
-        });
-        console.log("Token Response:", tokenResponse.data); 
-        const accessToken = tokenResponse.data.access_token;
-        if (!accessToken) {
-            throw new Error("Access token not received");
+app.get('/getAccessToken', async function(req,res){
+    console.log(req.query.code);
+    const params="?client_id=" + clientId + "&client_secret=" + clientSecret + "&code=" + req.query.code;
+    await fetch("https://github.com/login/oauth/access_token" + params,{
+        method: "POST",
+        headers: {
+            "Accept": "application/json"
         }
-        const userResponse = await axios.get("https://api.github.com/user", {
-            headers: {
-                Authorization: `token ${accessToken}`
-            }
-        });
-
-        const { login, email } = userResponse.data;
-
-        let user = await UserModel.findOne({ email: email });
-        if (!user) {
-            user = new UserModel({ name: login, email: email });
-            await user.save();
-        }
-
-        const token = jwt.sign({ email: user.email, role: user.role }, "jwt-secret-key", { expiresIn: "1d" });
-        res.cookie("token", token);
-
-        res.redirect(`${process.env.ORIGINS}/github-login-success?token=${token}`);
-    } catch (error) {
-        console.error("GitHub OAuth error:", error);
-        res.redirect(`${process.env.ORIGINS}/other-login?error=github_auth_failed`);
-    }
+    }).then((response)=>{
+        return response.json();
+    }).then((data)=>{
+        console.log(data);
+        res.json(data);
+    })
 });
+
+//getUserData
+//access token is going to passed in as a authorization header
+app.get('/getUserData', async function(req,res){
+    req.get("Authorization");  //Bearer AccessToken
+    await fetch("https://api.github.com/user",{
+        method: "GET",
+        headers: {
+            "Authorization": req.get("Authorization")
+        }
+    }).then((response)=>{
+        return response.json();
+    }).then((data)=>{
+        console.log(data);
+        res.json(data);
+    })
+})
 
 
 app.get("/logout", (req, res) => {

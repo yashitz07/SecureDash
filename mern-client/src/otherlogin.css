@@ -30,7 +30,7 @@
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* Add margin between buttons */
 }
 
 .btn-google {
@@ -39,14 +39,6 @@
 
 .btn-google:hover {
     background-color: #c33c2e;
-}
-
-.btn-microsoft {
-    background-color: #2b579a;
-}
-
-.btn-microsoft:hover {
-    background-color: #1f3a6e;
 }
 
 .btn-github {
