@@ -27,7 +27,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const redirectUri = process.env.REDIRECT_URI;
 
 
 
