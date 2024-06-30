@@ -48,27 +48,29 @@ app.get('/getAccessToken', async function(req,res){
 
 //getUserData
 //access token is going to passed in as a authorization header
-app.get('/getUserData', async function(req,res){
-    req.get("Authorization");  //Bearer AccessToken
-    await fetch("https://api.github.com/user",{
-        method: "GET",
-        headers: {
-            "Authorization": req.get("Authorization")
-        }
-    }).then((response)=>{
-        return response.json();
-    }).then((data)=>{
-        console.log(data);
-        res.json(data);
-    })
-})
+app.get('/getUserData', async function(req, res) {
+    const accessToken = req.headers.authorization.split(' ')[1]; // Extract access token from Authorization header
+    try {
+        const githubResponse = await axios.get("https://api.github.com/user", {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        const userData = githubResponse.data;
+        res.json(userData); // Send GitHub user data back to the client
+    } catch (error) {
+        console.error('Error fetching GitHub user data:', error);
+        res.status(500).json({ error: 'Failed to fetch GitHub user data' });
+    }
+});
+
 
 
 app.get("/logout", (req, res) => {
     res.clearCookie("token");
     res.status(200).json({ message: 'Logout successful' });
   });
-  app.options('/register', cors());
+//   app.options('/register', cors());
 app.post('/register', (req, res) => {
     const {name, email, password} = req.body;
     bcrypt.hash(password, 10)

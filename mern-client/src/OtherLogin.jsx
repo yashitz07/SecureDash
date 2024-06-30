@@ -37,48 +37,49 @@ const OtherLogin = ({ setIsLoggedIn }) => {
         alert('Google Sign-In failed. Please try again.');
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const codeParams = urlParams.get("code");
-        console.log('GitHub OAuth Code:', codeParams);
 
-        if(codeParams && (localStorage.getItem("accessToken")==null)){
-            async function getAccessToken(){
-                await fetch(`${import.meta.env.VITE_SERVER_URL}/getAccessToken?code=` + codeParams,{
-                    method: "GET"
-                }).then((response) =>{
-                    return response.json();
-                }).then((data) =>{
-                    console.log(data);
-                    if(data.access_token){
+        if (codeParams && localStorage.getItem("accessToken") === null) {
+            async function getAccessToken() {
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/getAccessToken?code=${codeParams}`, {
+                        method: "GET"
+                    });
+                    const data = await response.json();
+                    if (data.access_token) {
                         localStorage.setItem("accessToken", data.access_token);
                         setRerender(!rerender);
                         setIsLoggedIn(true);
+                        
+                        // Fetch GitHub user data and display welcome message
+                        const userDataResponse = await fetch(`${import.meta.env.VITE_SERVER_URL}/getUserData`, {
+                            method: "GET",
+                            headers: {
+                                "Authorization": `Bearer ${data.access_token}`
+                            }
+                        });
+                        const userData = await userDataResponse.json();
+                        alert(`Welcome ${userData.name}!`);
+
                         navigate('/welcome');
                     } else {
                         console.error('Error in access token response:', data);
                         alert('Failed to log in with GitHub. Please try again.');
                     }
-                })
+                } catch (error) {
+                    console.error('Error fetching access token:', error);
+                    alert('Failed to log in with GitHub. Please try again.');
+                }
             }
             getAccessToken();
         }
-
     }, [navigate, setIsLoggedIn]);
+
     
-    async function getUserData(){
-        await fetch(`${import.meta.env.VITE_SERVER_URL}/getUserData`,{
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer" + localStorage.getItem("accessToken")
-            }
-        }).then((response)=>{
-            return response.json();
-        }).then((data)=>{
-            console.log(data);
-        })
-    }
+    
     
     const handleGitHubLogin = () => {
         // Redirect user to GitHub authorization URL
