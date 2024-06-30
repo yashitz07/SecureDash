@@ -13,7 +13,7 @@ const app = express()
 app.use(express.json())
 app.use(cors({
     // for jwt cookies
-    origin:[process.env.ORIGINS],
+    origin:process.env.ORIGINS.split(','),
     methods: ["GET", "POST"],
     credentials: true
 }))
@@ -68,7 +68,7 @@ app.get("/logout", (req, res) => {
     res.clearCookie("token");
     res.status(200).json({ message: 'Logout successful' });
   });
-  
+  app.options('/register', cors());
 app.post('/register', (req, res) => {
     const {name, email, password} = req.body;
     bcrypt.hash(password, 10)
