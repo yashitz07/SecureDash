@@ -32,7 +32,7 @@ Welcome to **SecureDash**! This project provides a comprehensive authentication 
 1. **Clone the repository**:
 
    ```sh
-   git clone https://github.com/yashitz/SecureDash.git
+   git clone https://github.com/yashitz07/SecureDash.git
 
 2. **Install dependencies**:
 
