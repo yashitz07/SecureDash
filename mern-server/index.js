@@ -13,7 +13,7 @@ const app = express()
 app.use(express.json())
 app.use(cors({
     // for jwt cookies
-    origin:process.env.ORIGINS.split(','),
+    origin:"http://localhost:5173".split(','),
     methods: ["GET", "POST"],
     credentials: true
 }))
