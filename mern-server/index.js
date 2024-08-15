@@ -13,7 +13,7 @@ const app = express()
 app.use(express.json())
 app.use(cors({
     // for jwt cookies
-    origin:"http://localhost:5173".split(','),
+    origin:"https://secure-dash-two.vercel.app/".split(','),
     methods: ["GET", "POST"],
     credentials: true
 }))
