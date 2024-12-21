@@ -64,7 +64,26 @@ app.get('/getUserData', async function(req, res) {
     }
 });
 
-
+app.post("/saveUser", async (req, res) => {
+    const { name, email } = req.body;
+  
+    try {
+      let user = await UserModel.findOne({ email });
+  
+      if (!user) {
+        // If user doesn't exist, create a new one
+        user = new UserModel({ name, email });
+        await user.save();
+        res.status(201).json({ message: "User saved successfully" });
+      } else {
+        // If user exists, send a success response
+        res.status(200).json({ message: "User already exists" });
+      }
+    } catch (error) {
+      console.error("Error saving user:", error);
+      res.status(500).json({ error: "Error saving user" });
+    }
+  });
 
 app.get("/logout", (req, res) => {
     res.clearCookie("token");

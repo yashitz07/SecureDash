@@ -14,7 +14,7 @@ const OtherLogin = ({ setIsLoggedIn }) => {
 
     const [rerender,setRerender] = useState(false);
 
-    const handleGoogleLoginSuccess = (credentialResponse) => {
+    const handleGoogleLoginSuccess = async (credentialResponse) => {
         const { credential } = credentialResponse;
         if (credential) {
             const decoded = jwtDecode(credential);
@@ -24,11 +24,22 @@ const OtherLogin = ({ setIsLoggedIn }) => {
             const { email, name } = decoded;
 
             // Update the logged-in state and navigate to the welcome page
-            setIsLoggedIn(true);
-            console.log(`User signed in with email: ${email}`);
-            alert(`Welcome ${name}!`);
-
-            navigate('/welcome', { state: { isGoogleUser: true } });
+            try {
+                await fetch(`${import.meta.env.VITE_SERVER_URL}/saveUser`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name, email }),
+                });
+    
+                setIsLoggedIn(true);
+                alert(`Welcome ${name}!`);
+                navigate('/welcome', { state: { isGoogleUser: true } });
+            } catch (error) {
+                console.error("Error saving user:", error);
+                alert("Failed to log in with Google. Please try again.");
+            }
         }
     };
 
@@ -61,7 +72,21 @@ const OtherLogin = ({ setIsLoggedIn }) => {
                                 "Authorization": `Bearer ${data.access_token}`
                             }
                         });
+
                         const userData = await userDataResponse.json();
+                       // console.log("GitHub user data:", userData);
+
+                        await fetch(`${import.meta.env.VITE_SERVER_URL}/saveUser`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                name: userData.name,
+                                email: userData.email,
+                            }),
+                        });
+
                         alert(`Welcome ${userData.name}!`);
 
                         navigate('/welcome');
@@ -85,33 +110,6 @@ const OtherLogin = ({ setIsLoggedIn }) => {
         // Redirect user to GitHub authorization URL
         window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
     };
-
-    // const msalConfig = {
-    //     auth: {
-    //         clientId: import.meta.env.VITE_MICROSOFT_CLIENT_ID,
-    //         redirectUri:`http://localhost:5173/auth/microsoft/callback`, 
-    //     }
-    // };
-
-    // const msalInstance = new PublicClientApplication(msalConfig);
-
-    // const loginRequest = {
-    //     scopes: ["user.read"]
-    // };
-
-    // const handleMicrosoftLogin = async () => {
-    //     try {
-    //         const response = await msalInstance.loginRedirect(loginRequest);
-    //         if (response) {
-    //             console.log(response);
-    //             setIsLoggedIn(true);
-    //             navigate('/welcome', { state: { isMicrosoftUser: true, msalInstance } });
-    //         }
-    //     } catch (error) {
-    //         console.error('Microsoft login error:', error);
-    //         alert('Microsoft Sign-In failed. Please try again.');
-    //     }
-    // };
 
     return (
         <div className="other-login-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
